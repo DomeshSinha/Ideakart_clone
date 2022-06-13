@@ -4,15 +4,8 @@ IdeaKart is one of the best online book shop. The IdeaKart will contains the all
 
 Deployment:
 To deploy this project run
-About the project: This is a team project, built by us in the Construct Week- Unit 3at Masai School.
+About the project: This is a solo project, built by me in the Construct Week- Unit 2 Masai School.
 
-TEAM MEMBERS
-1.	Aditya joarder
-2.	Pawan
-3.	Akshay Sunil Bhagwatkar
-4.	Sakshi Gupta
-5.	Chaitali Dinesh Amale
-6.	Somyakant Mohapatra
 
 Technology Used
 •	HTML
