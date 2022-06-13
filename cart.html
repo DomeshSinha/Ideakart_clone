@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/index.css">
+    <script src="https://kit.fontawesome.com/16c456c613.js" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="navbar"></div>
+    <div id="sub_header">
+        <div id="back"><img src="https://cdn-icons-png.flaticon.com/512/3925/3925149.png" alt="back"><a
+                href="products.html">
+                <h2 class="sub">Back</h2>
+            </a></div>
+
+        <div id="checkout">
+            <h2 class="sub">Your Cart</h2>
+            <h2 id="items"></h2>
+        </div>
+    </div>
+
+    <div id="content">
+        <div id="cart">
+            <div id="product">
+                <h2>Your Cart Details</h2>
+            </div>
+            <div id="details"></div>
+        </div>
+
+        <div id="summary">
+            <div id="order">
+                <h2>ORDER SUMMARY</h2>
+            </div>
+            <div class="SumCart">
+                <h2>Sub Total </h2>
+                <h2 id="total"></h2>
+            </div>
+            <div id="input">
+                <input type="text" id="coupon" placeholder="Apply Coupon">
+                <button id="apply">Apply</button>
+            </div>
+            <div class="SumCart">
+                <h3>Delivery Charges*</h3>
+                <h3>NA</h3>
+            </div>
+            <div class="SumCart">
+                <h3>Gift Packing</h3>
+                <h3>NA</h3>
+            </div>
+            <div class="SumCart">
+                <h3>Coupon Discount</h3>
+                <h3 id="couponDis"></h3>
+            </div>
+            <hr>
+            <div class="SumCart">
+                <h2>Payable Amount</h2>
+                <h2 id="payable"></h2>
+            </div>
+            <button id="checkout1">Checkout</button>
+            <p>No Delivery charges for Express Store Pickup.</p>
+            <p>Do you have a gift card or and electronic gift voucher? Use it at the payment page</p>
+        </div>
+    </div>
+    <div id="footer"></div>
+</body>
+
+</html>
+
+<script type="module">
+
+    import { navBar,searchfunc,getData,saveFunc } from "./components/navbar.js";
+
+    document.getElementById("navbar").innerHTML = navBar();
+
+    import {bottom} from "./components/footer.js";
+
+    document.getElementById("footer").innerHTML=bottom();
+
+    let funCheck = () => {
+
+        console.log("hey");
+        window.location.href = "checkout.html";
+
+    }
+    document.getElementById("checkout1").addEventListener("click", funCheck);
+
+
+    let arr = JSON.parse(localStorage.getItem("cart")) || [];
+    console.log(arr, arr.length);
+
+    let price = 300;
+
+    document.getElementById("items").innerText = `:(${arr.length} Items)`;
+
+
+
+
+    let total = Math.ceil(arr.length * price);
+
+    localStorage.setItem("subtotal",JSON.stringify(total));
+
+    document.getElementById("total").innerText = (`₹${total}`);
+    
+    document.getElementById("payable").innerText = (`₹${total}`);
+
+
+    let couponFun = () => {
+
+        if (document.getElementById("coupon").value == "masai20") {
+
+            let payableAmount = total * 0.8;
+
+            document.getElementById("payable").innerText = (`₹${payableAmount}`);
+
+            
+            localStorage.setItem("payableAmount",JSON.stringify(payableAmount));
+
+            document.getElementById("couponDis").innerText = "20%";
+            let dis="20%";
+            localStorage.setItem("discount",JSON.stringify(dis));
+
+            document.getElementById("coupon").value = "";
+            document.getElementById("coupon").disabled = true;
+        }
+        else if (document.getElementById("coupon").disabled == true) {
+            alert(" coupon applied");
+        } else {
+            alert("Enter a valid coupon");
+        }
+    }
+
+
+    document.getElementById("apply").addEventListener("click", couponFun);
+
+ 
+
+    let appendData = (arr, price) => {
+
+      
+
+        arr.map((el, index) => {
+
+            let qty1;
+
+            let div = document.createElement("div");
+            div.setAttribute("id", "contentDiv");
+
+            let Rdiv = document.createElement("div");
+            Rdiv.setAttribute("id", "contentRDiv");
+
+            let img = document.createElement("img");
+            img.src = `https://covers.openlibrary.org/b/id/${el.cover_i}-L.jpg`;
+
+            Rdiv.append(img);
+
+            let Ldiv = document.createElement("div");
+            Ldiv.setAttribute("id", "contentLDiv");
+
+            let h3 = document.createElement("h3");
+            h3.innerText = el.title;
+
+            let p = document.createElement("p");
+            p.innerText = el.author_name[0];
+
+            let main = document.createElement("div");
+            main.setAttribute("id", "maindiv");
+
+            let div1 = document.createElement("div");
+            div1.setAttribute("id", "qty");
+
+            let p1 = document.createElement("h3");
+            p1.innerText = "QTY:";
+
+            let inp = document.createElement("select");
+            inp.setAttribute("id", "quant");
+        
+
+            let option1 = document.createElement("option");
+            option1.innerText = 1;
+            option1.value = 1;
+           
+
+
+            inp.append(option1);
+
+            let div2 = document.createElement("div");
+            div2.setAttribute("id", "price");
+
+            let btn = document.createElement("button");
+            btn.setAttribute("id", "remove");
+            btn.innerText = "Remove";
+            btn.addEventListener("click", () => {
+
+                Myremove(el, index);
+            })
+
+            let div3 = document.createElement("div");
+            div3.setAttribute("id", "price");
+            div3.style.display = "flex";
+
+            let p3 = document.createElement("h3");
+            p3.innerText = "Price:";
+
+            let price1 = document.createElement("h3");
+            price1.setAttribute("id","price1");
+            price1.innerText = price;
+
+
+            div1.append(p1, inp);
+            div2.append(btn);
+            div3.append(p3, price1);
+
+            main.append(div1, div2, div3);
+            Ldiv.append(h3, p, main);
+
+            div.append(Rdiv, Ldiv);
+
+            document.getElementById("details").append(div);
+
+        });
+
+
+
+    }
+
+    appendData(arr, price);
+
+    function Myremove(el, index) {
+
+        arr.splice(index, 1);
+        localStorage.setItem("cart", JSON.stringify(arr));
+        window.location.reload();
+        document.getElementById("items").innerText = `:(${arr.length}Items)`;
+        total = (arr.length * price);
+        document.getElementById("total").innerText = (`₹${total}`);
+        document.getElementById("payable").innerText = (`₹${total}`);
+
+    }
+
+
+
+
+
+</script>
+
+
